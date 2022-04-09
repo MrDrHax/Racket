@@ -1,0 +1,33 @@
+html {
+    background-color: rgb(63, 63, 63);
+    color: white;
+    margin: 10em;
+}
+
+.error{
+    color: rgb(206, 33, 33);
+}
+
+.parentesis1{
+    color: rgb(20, 150, 117);
+}
+
+.key{
+    color: rgb(133, 169, 248);
+}
+
+.string{
+    color: rgb(228, 208, 29);
+}
+
+.int{
+    color: rgb(200, 118, 255);
+}
+
+.indent{
+    margin: 0px;
+    padding: 0px;
+    padding-left: 20px;
+    margin-left: 5px;
+    border-left: 2px solid rgb(102, 102, 102);
+}
