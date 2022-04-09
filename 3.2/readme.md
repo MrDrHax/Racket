@@ -15,6 +15,8 @@ Index:
 
 - Racket-lang
 
+file `activity.rkt`
+
 # Functions given:
 
 ## arithmetic-lexer
@@ -32,6 +34,6 @@ Example:
 
 ### Examples
 
-$ (arithmetic-lexer "a = 32.4 *(-8.6 - b)/       6.1E-8")
+`$ (arithmetic-lexer "a = 32.4 *(-8.6 - b)/       6.1E-8")`
 
-> '((#\a Variable) (#\= Asignacion) ((#\3 #\2 #\. #\4) Real) (#\* Multiplicacion) (#\( "Parentesis que abre") ((#\- #\8 #\. #\6) Real) (#\- Resta) (#\b Variable) (#\) "Parentesis que cierra") (#\/ Division) ((#\6 #\. #\1 #\E #\- #\8) Real))
+> `'((#\a Variable) (#\= Asignacion) ((#\3 #\2 #\. #\4) Real) (#\* Multiplicacion) (#\( "Parentesis que abre") ((#\- #\8 #\. #\6) Real) (#\- Resta) (#\b Variable) (#\) "Parentesis que cierra") (#\/ Division) ((#\6 #\. #\1 #\E #\- #\8) Real))`
