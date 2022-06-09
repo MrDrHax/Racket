@@ -42,20 +42,20 @@ defmodule ProjFinal do
 
   def modoCorchete(tl, build, stack) do
     IO.puts("#{tl}: INICIAR CORCHETE, siguientes: #{stack}")
-    modoValor(tl, Enum.join([build, "<span class=\"parentesis\">[</span><br><div class=\"indent\">"]), ["[" | stack])
+    modoValor(tl, Enum.join([build, "<span class=\"parentesis1\">[</span><br><div class=\"indent\">"]), ["[" | stack])
   end
 
   def modoCorcheteF([], build, _), do: build
   def modoCorcheteF([hd | _], build, [next | ""]) do
     IO.puts("#{hd}: TERMINAR CORCHETE #{next}")
-    Enum.join([build, "</div><class=\"parentesis\">]</span><br>"])
+    Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"])
   end
   def modoCorcheteF([hd | tl], build, [this | stack]) do
     [next | _] = stack
     IO.puts("#{hd}: TERMINAR CORCHETE #{this}, #{next}, siguientes: #{stack}")
     case next do
-      "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><class=\"parentesis\">]</span><br>"]), stack)
-      "{" -> modoIterarLlave(tl, Enum.join([build, "</div><class=\"parentesis\">]</span><br>"]), stack)
+      "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"]), stack)
+      "{" -> modoIterarLlave(tl, Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"]), stack)
     end
   end
 
@@ -131,20 +131,20 @@ defmodule ProjFinal do
   ## Key search
   def modoLlave(tl, build, stack) do
     IO.puts("#{tl}: INICIAR LLAVE, siguientes: #{stack}")
-    modoTagLlave(tl, Enum.join([build, "<span class=\"parentesis\">{</span><br><div class=\"indent\"><span class=\"key\">"]), ["{" | stack])
+    modoTagLlave(tl, Enum.join([build, "<span class=\"parentesis1\">{</span><br><div class=\"indent\"><span class=\"key\">"]), ["{" | stack])
   end
 
   def modoLlaveF([], build, _), do: build
   def modoLlaveF([hd | _], build, [next | ""]) do
     IO.puts("#{hd}: TERMINAR LLAVE #{next}")
-    Enum.join([build, "</div><class=\"parentesis\">}</span><br>"])
+    Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"])
   end
   def modoLlaveF([hd | tl], build, [this | stack]) do
     [next | _] = stack
     IO.puts("#{hd}: TERMINAR LLAVE #{this}, #{next}, siguientes: #{stack}")
     case next do
-      "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><class=\"parentesis\">}</span><br>"]), stack)
-      "{" -> modoIterarLlave(tl, Enum.join([build, "</div><class=\"parentesis\">}</span><br>"]), stack)
+      "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"]), stack)
+      "{" -> modoIterarLlave(tl, Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"]), stack)
     end
   end
 
