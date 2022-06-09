@@ -6,6 +6,35 @@ defmodule ProjFinal do
   """
 
   @doc """
+  read a lot of files and parse it to formated HTML.
+  Uses paralellism to save time
+
+  ## Examples
+
+      iex> ProjFinal.parseFiles(["/path/to/file/one.json", "relative/path/toJson.json"], "/path/to/output/folder")
+      reads the files and writes the files as name in the folder given
+  """
+  def parseFiles(paths, outFolder) do
+    time = Time.utc_now()
+
+    # makes the necessary directories
+    File.mkdir_p!(Path.dirname("#{outFolder}/elements/"))
+
+    # coppy the style.css for required HTML stuff
+    File.copy("lib/elements/style.css", "#{outFolder}/elements/style.css")
+
+    # summon all threads
+    for file <- paths do
+      IO.puts(Enum.join([file, Enum.join([outFolder, "/", Regex.replace(~r/.+\/(.+)\.json/, file, "\\1.html")])], " | "))
+      spawn(ProjFinal, :read, [file, Enum.join([outFolder, "/", Regex.replace(~r/.+\/(.+)\.json/, file, "\\1.html")])])
+    end
+
+    # print execution times
+    executionTime = Time.diff(Time.utc_now(), time, :millisecond)
+    IO.puts("Finished starting threads in #{executionTime}ms")
+  end
+
+  @doc """
   read a file.
 
   ## Examples
@@ -15,24 +44,27 @@ defmodule ProjFinal do
 
   """
   def read(in_filename, out_filename) do
-    IO.puts("Working...")
-    # data = File.stream!(in_filename) #Lista de renglones
+    IO.puts("Working on file #{in_filename}...")
 
-    #Using pipe operator to link the calls
+    time = Time.utc_now()
+
+    # read necesarry files and run parser
     text = stateStart(String.split(File.read!(in_filename), ""))
 
     # data2 = File.stream!("base.html") #Lista de renglones
 
-    #Using pipe operator to link the calls
-    text2 = File.read!("elements/base.html")
-
-    IO.puts("Done!")
+    # read necesarry files
+    text2 = File.read!("lib/elements/base.html")
 
     File.write(out_filename, "#{text2}#{text}\n</p>\n</body>\n</html>")
+
+    executionTime = Time.diff(Time.utc_now(), time, :millisecond)
+
+    IO.puts("Finished file #{in_filename}! (#{executionTime}ms)")
   end
 
   def stateStart([hd | tl]) do
-    IO.puts(hd)
+    # starts the file, gets run only once
     case hd do
       "[" -> modoCorchete(tl, "", "") # [
       "{" -> modoLlave(tl, "", "") # {
@@ -41,18 +73,18 @@ defmodule ProjFinal do
   end
 
   def modoCorchete(tl, build, stack) do
-    IO.puts("#{tl}: INICIAR CORCHETE, siguientes: #{stack}")
+    # puts the necesarry html tags when starting a [
     modoValor(tl, Enum.join([build, "<span class=\"parentesis1\">[</span><br><div class=\"indent\">"]), ["[" | stack])
   end
 
+  # end functions for ]
   def modoCorcheteF([], build, _), do: build
-  def modoCorcheteF([hd | _], build, [next | ""]) do
-    IO.puts("#{hd}: TERMINAR CORCHETE #{next}")
+  def modoCorcheteF(_, build, [_ | ""]) do
     Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"])
   end
-  def modoCorcheteF([hd | tl], build, [this | stack]) do
+  def modoCorcheteF([_ | tl], build, [_ | stack]) do
     [next | _] = stack
-    IO.puts("#{hd}: TERMINAR CORCHETE #{this}, #{next}, siguientes: #{stack}")
+    # makes sure that the next item in the stack gets chosen, so that it continues where it left off
     case next do
       "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"]), stack)
       "{" -> modoIterarLlave(tl, Enum.join([build, "</div><span class=\"parentesis1\">]</span><br>"]), stack)
@@ -62,7 +94,7 @@ defmodule ProjFinal do
   def modoIterarCorchete(_, build, []), do: build
   def modoIterarCorchete([], build, _), do: build
   def modoIterarCorchete([hd | tl], build, stack) do
-    IO.puts("#{hd}: ITERAR CORCHETE")
+    # itterates on what should be done next
     case hd do
       "," -> modoValor(tl, Enum.join([build, hd, "<br>"]), stack)
       "]" -> modoCorcheteF([hd | tl], build, stack)
@@ -71,7 +103,7 @@ defmodule ProjFinal do
   end
 
   def modoCientrifico([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO CIENTIFICO")
+    # for scientific numbers
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoCientrifico(tl, Enum.join([build, hd]), stack)
       hd == "+" or hd == "-" -> modoCientrifico(tl, Enum.join([build, hd]), stack)
@@ -80,7 +112,7 @@ defmodule ProjFinal do
   end
 
   def modoFloat([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO FLOAT")
+    # for floats
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoFloat(tl, Enum.join([build, hd]), stack)
       hd == "E" -> modoCientrifico(tl, Enum.join([build, hd]), stack)
@@ -89,7 +121,7 @@ defmodule ProjFinal do
   end
 
   def modoInt([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO INT")
+    # for ints
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoInt(tl, Enum.join([build, hd]), stack)
       hd == "." -> modoFloat(tl, Enum.join([build, hd]), stack)
@@ -98,7 +130,7 @@ defmodule ProjFinal do
   end
 
   def modoEspecial([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO NULL,TRUE,FALSE")
+    # for true, false, and null
     cond do
       Regex.match?(~r/[truefalsn]/, hd) -> modoEspecial(tl, Enum.join([build, hd]), stack)
       true -> modoIterarCorchete([hd | tl], Enum.join([build, "</span>"]), stack)
@@ -106,7 +138,7 @@ defmodule ProjFinal do
   end
 
   def modoString([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO STRING")
+    # To itterate over strings
     case hd do
       "\""-> modoIterarCorchete(tl, Enum.join([build, hd, "</span>"]), stack)
       _ -> modoString(tl, Enum.join([build, hd]), stack)
@@ -115,7 +147,7 @@ defmodule ProjFinal do
 
   def modoValor([], build, _), do: build
   def modoValor([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO VALOR")
+    # itterates and asks what is needed next
     cond do
       hd == "[" -> modoCorchete(tl, build, stack)
       hd == "{" -> modoLlave(tl, build, stack)
@@ -127,21 +159,20 @@ defmodule ProjFinal do
     end
   end
 
+  # NOTE: all values return to modoIterar in its type, below is the same but for dictionaries
+
   ### ------------------------------------------------------------------------------------------------------
   ## Key search
   def modoLlave(tl, build, stack) do
-    IO.puts("#{tl}: INICIAR LLAVE, siguientes: #{stack}")
     modoTagLlave(tl, Enum.join([build, "<span class=\"parentesis1\">{</span><br><div class=\"indent\"><span class=\"key\">"]), ["{" | stack])
   end
 
   def modoLlaveF([], build, _), do: build
-  def modoLlaveF([hd | _], build, [next | ""]) do
-    IO.puts("#{hd}: TERMINAR LLAVE #{next}")
+  def modoLlaveF(_, build, [_ | ""]) do
     Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"])
   end
-  def modoLlaveF([hd | tl], build, [this | stack]) do
+  def modoLlaveF([_ | tl], build, [_ | stack]) do
     [next | _] = stack
-    IO.puts("#{hd}: TERMINAR LLAVE #{this}, #{next}, siguientes: #{stack}")
     case next do
       "[" -> modoIterarCorchete(tl, Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"]), stack)
       "{" -> modoIterarLlave(tl, Enum.join([build, "</div><span class=\"parentesis1\">}</span><br>"]), stack)
@@ -151,7 +182,6 @@ defmodule ProjFinal do
   def modoIterarLlave(_, build, []), do: build
   def modoIterarLlave([], build, _), do: build
   def modoIterarLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: ITERAR LLAVE")
     case hd do
       "," -> modoTagLlave(tl, Enum.join([build, hd, "<br><span class=\"key\">"]), stack)
       "}" -> modoLlaveF([hd | tl], build, stack)
@@ -160,7 +190,7 @@ defmodule ProjFinal do
   end
 
   def modoTagLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: ITERAR LLAVE STRING")
+    # only difference between array, this part checks for the key and continues afterwards
     case hd do
       ":" -> modoValorLlave(tl, Enum.join([build, ":</span> "]), stack)
       "}" -> modoLlaveF(tl, Enum.join([build, "</span>"]), stack)
@@ -169,7 +199,6 @@ defmodule ProjFinal do
   end
 
   def modoCientrificoLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO CIENTIFICO")
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoCientrificoLlave(tl, Enum.join([build, hd]), stack)
       hd == "+" or hd == "-" -> modoCientrificoLlave(tl, Enum.join([build, hd]), stack)
@@ -178,7 +207,6 @@ defmodule ProjFinal do
   end
 
   def modoFloatLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO FLOAT")
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoFloatLlave(tl, Enum.join([build, hd]), stack)
       hd == "E" -> modoCientrificoLlave(tl, Enum.join([build, hd]), stack)
@@ -187,7 +215,6 @@ defmodule ProjFinal do
   end
 
   def modoIntLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO INT")
     cond do
       Regex.match?(~r/^\d$/, hd) -> modoIntLlave(tl, Enum.join([build, hd]), stack)
       hd == "." -> modoFloatLlave(tl, Enum.join([build, hd]), stack)
@@ -196,7 +223,6 @@ defmodule ProjFinal do
   end
 
   def modoEspecialLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO NULL,TRUE,FALSE")
     cond do
       Regex.match?(~r/[truefalsn]/, hd) -> modoEspecialLlave(tl, Enum.join([build, hd]), stack)
       true -> modoIterarLlave([hd | tl], Enum.join([build, "</span>"]), stack)
@@ -204,7 +230,6 @@ defmodule ProjFinal do
   end
 
   def modoStringLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO STRING")
     case hd do
       "\""-> modoIterarLlave(tl, Enum.join([build, hd, "</span>"]), stack)
       _ -> modoStringLlave(tl, Enum.join([build, hd]), stack)
@@ -213,7 +238,6 @@ defmodule ProjFinal do
 
   def modoValorLlave([], build, _), do: build
   def modoValorLlave([hd | tl], build, stack) do
-    IO.puts("#{hd}: MODO VALOR")
     cond do
       hd == "[" -> modoCorchete(tl, build, stack)
       hd == "{" -> modoLlave(tl, build, stack)
@@ -225,5 +249,3 @@ defmodule ProjFinal do
     end
   end
 end
-
-ProjFinal.read("inputTests/test3.json", "output.html")
