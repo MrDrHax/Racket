@@ -1,0 +1,96 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="elements/style.css">
+    <title>JSON parser</title>
+</head>
+<body>
+    <h1>JSON Parser for Elixir</h1>
+    <p>Created by: <br>Alejandro Fernandez <br>Ariadne Alvarez</p>
+<span class="parentesis1">{</span><br><div class="indent"><span class="key">"web-app":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+  "servlet":</span> <span class="parentesis1">[</span><br><div class="indent"><span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "servlet-name":</span> <span class="string">"cofaxCDS"</span>,<br><span class="key">
+      "servlet-class":</span> <span class="string">"org.cofax.cds.CDSServlet"</span>,<br><span class="key">
+      "init-param":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+        "configGlossary:</span> <span class="esp">nstallat</span>,<br><span class="key"> PA",
+        "configGlossary:</span> <span class="esp">a</span>,<br><span class="key">
+        "configGlossary:</span> <span class="esp">ere</span>,<br><span class="key">
+        "configGlossary:</span> <span class="esp">ere</span>,<br><span class="key">
+        "configGlossary:</span> <span class="esp">stat</span>,<br><span class="key">
+        "templateProcessorClass":</span> <span class="string">"org.cofax.WysiwygTemplate"</span>,<br><span class="key">
+        "templateLoaderClass":</span> <span class="string">"org.cofax.FilesTemplateLoader"</span>,<br><span class="key">
+        "templatePath":</span> <span class="string">"templates"</span>,<br><span class="key">
+        "templateOverridePath":</span> <span class="string">""</span>,<br><span class="key">
+        "defaultListTemplate":</span> <span class="string">"listTemplate.htm"</span>,<br><span class="key">
+        "defaultFileTemplate":</span> <span class="string">"articleTemplate.htm"</span>,<br><span class="key">
+        "useJSP":</span> <span class="esp">false</span>,<br><span class="key">
+        "jspListTemplate":</span> <span class="string">"listTemplate.jsp"</span>,<br><span class="key">
+        "jspFileTemplate":</span> <span class="string">"articleTemplate.jsp"</span>,<br><span class="key">
+        "cachePackageTagsTrack":</span> <span class="int">200</span>,<br><span class="key">
+        "cachePackageTagsStore":</span> <span class="int">200</span>,<br><span class="key">
+        "cachePackageTagsRefresh":</span> <span class="int">60</span>,<br><span class="key">
+        "cacheTemplatesTrack":</span> <span class="int">100</span>,<br><span class="key">
+        "cacheTemplatesStore":</span> <span class="int">50</span>,<br><span class="key">
+        "cacheTemplatesRefresh":</span> <span class="int">15</span>,<br><span class="key">
+        "cachePagesTrack":</span> <span class="int">200</span>,<br><span class="key">
+        "cachePagesStore":</span> <span class="int">100</span>,<br><span class="key">
+        "cachePagesRefresh":</span> <span class="int">10</span>,<br><span class="key">
+        "cachePagesDirtyRead":</span> <span class="int">10</span>,<br><span class="key">
+        "searchEngineListTemplate":</span> <span class="string">"forSearchEnginesList.htm"</span>,<br><span class="key">
+        "searchEngineFileTemplate":</span> <span class="string">"forSearchEngines.htm"</span>,<br><span class="key">
+        "searchEngineRobotsDb":</span> <span class="string">"WEB-INF/robots.db"</span>,<br><span class="key">
+        "useDataStore":</span> <span class="esp">true</span>,<br><span class="key">
+        "dataStoreClass":</span> <span class="string">"org.cofax.SqlDataStore"</span>,<br><span class="key">
+        "redirectionClass":</span> <span class="string">"org.cofax.SqlRedirection"</span>,<br><span class="key">
+        "dataStoreName":</span> <span class="string">"cofax"</span>,<br><span class="key">
+        "dataStoreDriver":</span> <span class="string">"com.microsoft.jdbc.sqlserver.SQLServerDriver"</span>,<br><span class="key">
+        "dataStoreUrl":</span> <span class="string">"jdbc:microsoft:sqlserver://LOCALHOST:1433;DatabaseName=goon"</span>,<br><span class="key">
+        "dataStoreUser":</span> <span class="string">"sa"</span>,<br><span class="key">
+        "dataStorePassword":</span> <span class="string">"dataStoreTestQuery"</span>,<br><span class="key">
+        "dataStoreTestQuery":</span> <span class="string">"SET NOCOUNT ON;select test='test';"</span>,<br><span class="key">
+        "dataStoreLogFile":</span> <span class="string">"/usr/local/tomcat/logs/datastore.log"</span>,<br><span class="key">
+        "dataStoreInitConns":</span> <span class="int">10</span>,<br><span class="key">
+        "dataStoreMaxConns":</span> <span class="int">100</span>,<br><span class="key">
+        "dataStoreConnUsageLimit":</span> <span class="int">100</span>,<br><span class="key">
+        "dataStoreLogLevel":</span> <span class="string">"debug"</span>,<br><span class="key">
+        "maxUrlLength":</span> <span class="int">500</span></div><span class="parentesis1">}</span><br></div><span class="parentesis1">}</span><br>,<br><span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "servlet-name":</span> <span class="string">"cofaxEmail"</span>,<br><span class="key">
+      "servlet-class":</span> <span class="string">"org.cofax.cds.EmailServlet"</span>,<br><span class="key">
+      "init-param":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "mailHost":</span> <span class="string">"mail1"</span>,<br><span class="key">
+      "mailHostOverride":</span> <span class="string">"mail2"</span></div><span class="parentesis1">}</span><br></div><span class="parentesis1">}</span><br>,<br><span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "servlet-name":</span> <span class="string">"cofaxAdmin"</span>,<br><span class="key">
+      "servlet-class":</span> <span class="string">"org.cofax.cds.AdminServlet"</span></div><span class="parentesis1">}</span><br>,<br><span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "servlet-name":</span> <span class="string">"fileServlet"</span>,<br><span class="key">
+      "servlet-class":</span> <span class="string">"org.cofax.cds.FileServlet"</span></div><span class="parentesis1">}</span><br>,<br><span class="parentesis1">{</span><br><div class="indent"><span class="key">
+      "servlet-name":</span> <span class="string">"cofaxTools"</span>,<br><span class="key">
+      "servlet-class":</span> <span class="string">"org.cofax.cms.CofaxToolsServlet"</span>,<br><span class="key">
+      "init-param":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+        "templatePath":</span> <span class="string">"toolstemplates/"</span>,<br><span class="key">
+        "log":</span> <span class="int">1</span>,<br><span class="key">
+        "logLocation":</span> <span class="string">"/usr/local/tomcat/logs/CofaxTools.log"</span>,<br><span class="key">
+        "logMaxSize":</span> <span class="string">""</span>,<br><span class="key">
+        "dataLog":</span> <span class="int">1</span>,<br><span class="key">
+        "dataLogLocation":</span> <span class="string">"/usr/local/tomcat/logs/dataLog.log"</span>,<br><span class="key">
+        "dataLogMaxSize":</span> <span class="string">""</span>,<br><span class="key">
+        "removePageCache":</span> <span class="string">"/content/admin/remove?cache=pages&id="</span>,<br><span class="key">
+        "removeTemplateCache":</span> <span class="string">"/content/admin/remove?cache=templates&id="</span>,<br><span class="key">
+        "fileTransferFolder":</span> <span class="string">"/usr/local/tomcat/webapps/content/fileTransferFolder"</span>,<br><span class="key">
+        "lookInContext":</span> <span class="int">1</span>,<br><span class="key">
+        "adminGroupID":</span> <span class="int">4</span>,<br><span class="key">
+        "betaServer":</span> <span class="esp">true</span></div><span class="parentesis1">}</span><br></div><span class="parentesis1">}</span><br></div><span class="parentesis1">]</span><br>,<br><span class="key">
+  "servlet-mapping":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+    "cofaxCDS":</span> <span class="string">"/"</span>,<br><span class="key">
+    "cofaxEmail":</span> <span class="string">"/cofaxutil/aemail/*"</span>,<br><span class="key">
+    "cofaxAdmin":</span> <span class="string">"/admin/*"</span>,<br><span class="key">
+    "fileServlet":</span> <span class="string">"/static/*"</span>,<br><span class="key">
+    "cofaxTools":</span> <span class="string">"/tools/*"</span></div><span class="parentesis1">}</span><br>,<br><span class="key">
+
+  "taglib":</span> <span class="parentesis1">{</span><br><div class="indent"><span class="key">
+    "taglib-uri":</span> <span class="string">"cofax.tld"</span>,<br><span class="key">
+    "taglib-location":</span> <span class="string">"/WEB-INF/tlds/cofax.tld"</span></div><span class="parentesis1">}</span><br></div><span class="parentesis1">}</span><br></div><span class="parentesis1">}</span><br>
+</p>
+</body>
+</html>
